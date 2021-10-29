@@ -6,7 +6,7 @@
 /*   By: gianlucapirro <gianlucapirro@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:59:04 by gianlucapir       #+#    #+#             */
-/*   Updated: 2021/10/25 15:38:00 by gianlucapir      ###   ########.fr       */
+/*   Updated: 2021/10/29 11:29:19 by gianlucapir      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,11 @@
 char	*get_next_line(int fd)
 {
 	static char	*s;
-	char		buffer[100];
+	char		buffer[BUFFER_SIZE + 1];
 	char		*tmp;
 	int 		ret;
-	int 		i;
 
-	i = 0;
-	while ((ret = read(fd, buffer, BUFF_SIZE)))
+	while ((ret = read(fd, buffer, 1)))
 	{
 		buffer[ret] = '\0';
 		if (s == NULL)
@@ -33,18 +31,25 @@ char	*get_next_line(int fd)
 			s = tmp;
 		}
 		if (ft_strchr(s, '\n'))
-			break ;
+			break ;		
 	}
-	tmp = output(s);
-	s = remainder_s(s);
-	return (tmp);
+	if (ret)
+	{
+		tmp = output(s);
+		s = remainder_s(s);
+		return (tmp);
+	}
+	return (s);
 }
 
 int main()
 {
 	int	fd;
 
-	fd = open("text", O_RDONLY);
+	fd = open("file1", O_RDONLY);
+	printf("%s\n", get_next_line(fd));
+	printf("%s\n", get_next_line(fd));
+	printf("%s\n", get_next_line(fd));
 	printf("%s\n", get_next_line(fd));
 	printf("%s\n", get_next_line(fd));
 	printf("%s\n", get_next_line(fd));
